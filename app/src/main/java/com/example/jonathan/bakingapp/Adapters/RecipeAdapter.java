@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +25,20 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
     private Context mContext;
     private ClickListener clickListener;
 
+    public void setRecipeList(ArrayList<String> arr) {
+        recipeList = arr;
+    }
 
     // Interface for Handling Clicks
     public interface ClickListener {
-        void onListItemClick(String clickedIndex);
+        // for string
+        //void onListItemClick(String clickedIndex);
+        void onListItemClick(int clickedIndex);
     }
 
-    public RecipeAdapter(ClickListener listener) {
+    public RecipeAdapter(ClickListener listener, Context context) {
         clickListener = listener;
+        mContext = context;
     }
 
 
@@ -61,11 +68,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
         holder.rvText.setText(recipeList.get(position));
         String imgUrl = recipeList.get(position);
 
-        // Load Image using Glide Library
         if(!imgUrl.equals("")) {
             Uri newUri = Uri.parse(imgUrl).buildUpon().build();
 
-            Picasso.with(mContext).load(newUri).into(holder.rvImage);
+            //Picasso.with(mContext).load(newUri).into(holder.rvImage);
         }
     }
 
@@ -86,7 +92,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
-            clickListener.onListItemClick(recipeList.get(clickedPosition));
+            // Send String
+            //clickListener.onListItemClick(recipeList.get(clickedPosition));
+            clickListener.onListItemClick(clickedPosition);
         }
 
     }
