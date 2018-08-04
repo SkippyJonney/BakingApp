@@ -3,22 +3,58 @@ package com.example.jonathan.bakingapp.Data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 
 public class SingleRecipe implements Parcelable {
 
     private int ID;
     private String Name;
-    private String ImgUrl;
-    private String[] Ingredients;
-    private String[] Steps;
+    private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+    private ArrayList<Step> steps = new ArrayList<Step>();
     private int Servings;
+    private String ImgUrl;
+
+
+    public int getStepLength() {
+        return steps.size();
+    }
+
+    // Ingredient Interface
+    public int getIngredientLength() { return ingredients.size(); }
+    public String getIngredient(int index) {
+        return ingredients.get(index).getListing();
+    }
+
+    public Step getStep(int position) {
+        return steps.get(position);
+    }
+
+    public ArrayList<Step> getSteps() {
+        return steps;
+    }
+
+    // Constructor without Ingredients and Steps -- add through accessors
+    public SingleRecipe(int ID, String name, int servings, String imgUrl) {
+        this.ID = ID;
+        Name = name;
+        Servings = servings;
+        ImgUrl = imgUrl;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        ingredients.add(ingredient);
+    }
+    public void addStep(Step step) {
+        steps.add(step);
+    }
 
     private SingleRecipe(Parcel in) {
         ID = in.readInt();
         Name = in.readString();
         ImgUrl = in.readString();
-        Ingredients = in.createStringArray();
-        Steps = in.createStringArray();
+        ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+        steps = in.createTypedArrayList(Step.CREATOR);
         Servings = in.readInt();
     }
 
@@ -26,11 +62,12 @@ public class SingleRecipe implements Parcelable {
         out.writeInt(ID);
         out.writeString(Name);
         out.writeString(ImgUrl);
-        out.writeStringArray(Ingredients);
-        out.writeStringArray(Steps);
+        out.writeTypedList(ingredients);
+        out.writeTypedList(steps);
         out.writeInt(Servings);
     }
 
+    // Parcelable Boilerplate
     @Override
     public int describeContents() {
         return 0;
@@ -49,75 +86,4 @@ public class SingleRecipe implements Parcelable {
         }
     };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Mutator && Accessors
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public String getImgUrl() {
-        return ImgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        ImgUrl = imgUrl;
-    }
-
-    public String[] getIngredients() {
-        return Ingredients;
-    }
-
-    public void setIngredients(String[] ingredients) {
-        Ingredients = ingredients;
-    }
-
-    public String[] getSteps() {
-        return Steps;
-    }
-
-    public void setSteps(String[] steps) {
-        Steps = steps;
-    }
-
-    public int getServings() {
-        return Servings;
-    }
-
-    public void setServings(int servings) {
-        Servings = servings;
-    }
 }

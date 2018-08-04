@@ -6,13 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.jonathan.bakingapp.Adapters.RecipeAdapter;
 import com.example.jonathan.bakingapp.Data.DummyData;
 import com.example.jonathan.bakingapp.R;
+import com.example.jonathan.bakingapp.Utility.PantryIO;
 
-import java.util.ArrayList;
 
 public class RecipeMainActivity  extends AppCompatActivity {
 
@@ -61,6 +60,10 @@ public class RecipeMainActivity  extends AppCompatActivity {
         mAdapter.setRecipeList(testData.getData());
         // *********************************
         mRecyclerView.setAdapter(mAdapter);
+
+
+        // Request Recipe
+        PantryIO newRequest = new PantryIO(this, getString(R.string.bakingDataURL));
     }
 
     public void sendIntent(int recipeIndex) {
