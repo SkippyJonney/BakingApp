@@ -15,6 +15,11 @@ public class SingleRecipe implements Parcelable {
     private int Servings;
     private String ImgUrl;
 
+    public String getName() {
+        return Name;
+    }
+    public String getImgUrl() { return ImgUrl;}
+
 
     public int getStepLength() {
         return steps.size();
@@ -25,11 +30,9 @@ public class SingleRecipe implements Parcelable {
     public String getIngredient(int index) {
         return ingredients.get(index).getListing();
     }
-
     public Step getStep(int position) {
         return steps.get(position);
     }
-
     public ArrayList<Step> getSteps() {
         return steps;
     }
@@ -50,20 +53,22 @@ public class SingleRecipe implements Parcelable {
     }
 
     private SingleRecipe(Parcel in) {
+        ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+        steps = in.createTypedArrayList(Step.CREATOR);
+        //in.readTypedList(ingredients, Ingredient.CREATOR);
+        //in.readTypedList(steps, Step.CREATOR);
         ID = in.readInt();
         Name = in.readString();
         ImgUrl = in.readString();
-        ingredients = in.createTypedArrayList(Ingredient.CREATOR);
-        steps = in.createTypedArrayList(Step.CREATOR);
         Servings = in.readInt();
     }
 
     public void writeToParcel(Parcel out, int flags) {
+        out.writeTypedList(ingredients);
+        out.writeTypedList(steps);
         out.writeInt(ID);
         out.writeString(Name);
         out.writeString(ImgUrl);
-        out.writeTypedList(ingredients);
-        out.writeTypedList(steps);
         out.writeInt(Servings);
     }
 

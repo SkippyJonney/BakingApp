@@ -34,7 +34,7 @@ public class RecipeStepAdapter extends ArrayAdapter<Step> {
         ImageView thumbnail = rowView.findViewById(R.id.step_imgIcon_iv);
 
         title.setText(steps.get(position).getId());
-        description.setText(steps.get(position).getDescription());
+        description.setText(steps.get(position).getShortDescription());
 
         return rowView;
     }

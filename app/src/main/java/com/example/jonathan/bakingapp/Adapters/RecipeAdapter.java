@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.jonathan.bakingapp.Data.SingleRecipe;
 import com.example.jonathan.bakingapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -21,12 +22,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
 
 
     // List of Recipes, need to change to a Custom Class
-    private ArrayList<String> recipeList;
+    private ArrayList<SingleRecipe> recipeList;
+    //private ArrayList<String> recipeList;
     private Context mContext;
     private ClickListener clickListener;
 
-    public void setRecipeList(ArrayList<String> arr) {
-        recipeList = arr;
+    public void setRecipeList(ArrayList<SingleRecipe> arrayIn) {
+        recipeList = arrayIn;
     }
 
     // Interface for Handling Clicks
@@ -65,8 +67,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        holder.rvText.setText(recipeList.get(position));
-        String imgUrl = recipeList.get(position);
+        //holder.rvText.setText(recipeList.get(position));
+        //String imgUrl = recipeList.get(position);
+
+        holder.rvText.setText(recipeList.get(position).getName());
+        String imgUrl = recipeList.get(position).getImgUrl();
 
         if(!imgUrl.equals("")) {
             Uri newUri = Uri.parse(imgUrl).buildUpon().build();

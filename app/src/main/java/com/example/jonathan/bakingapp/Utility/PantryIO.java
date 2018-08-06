@@ -1,6 +1,7 @@
 package com.example.jonathan.bakingapp.Utility;
 
         import android.content.Context;
+        import android.support.v7.widget.RecyclerView;
         import android.util.Log;
 
         import com.android.volley.RequestQueue;
@@ -9,6 +10,7 @@ package com.example.jonathan.bakingapp.Utility;
         import com.android.volley.toolbox.Volley;
         import com.android.volley.Response;
         import com.android.volley.Request;
+        import com.example.jonathan.bakingapp.Adapters.RecipeAdapter;
         import com.example.jonathan.bakingapp.Data.SingleRecipe;
         import com.example.jonathan.bakingapp.Data.Step;
         import com.example.jonathan.bakingapp.Data.Ingredient;
@@ -27,13 +29,18 @@ public class PantryIO {
     private String urlRequest;
     private String networkResult;
     private ArrayList<SingleRecipe> MasterList;
+    private final RecipeAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+
     // Volley
     RequestQueue requestQueue;
 
-    public PantryIO(Context context, String urlRequest){
+    public PantryIO(Context context, String urlRequest, RecipeAdapter mAdapter, RecyclerView mRecyclerView){
         this.context = context;
         this.urlRequest =urlRequest;
         MasterList = new ArrayList<SingleRecipe>();
+        this.mAdapter = mAdapter;
+        this.mRecyclerView = mRecyclerView;
 
         // Setup Volley
         requestQueue = Volley.newRequestQueue(context);
@@ -61,6 +68,8 @@ public class PantryIO {
                                 String imgUrl = recipe.getString("image");
                                 SingleRecipe newRecipe = new SingleRecipe(Integer.parseInt(ID),name,Integer.parseInt(servings),imgUrl);
 
+                                //Log.d("<><><><>", name);
+
                                 // Parse Ingredients & add to recipe
                                 JSONArray ingredients = recipe.getJSONArray("ingredients");
                                 for(int x = 0; x < ingredients.length(); x++) {
@@ -72,6 +81,8 @@ public class PantryIO {
                                     String ingredient = nextIngredient.getString("ingredient");
                                     Ingredient newIngredient = new  Ingredient(quantity, measure, ingredient);
                                     newRecipe.addIngredient(newIngredient);
+
+                                    //Log.d("<><><><>", ingredient);
                                 }
 
                                 // Parse Steps & add to recipe
@@ -92,6 +103,8 @@ public class PantryIO {
                                 // Add recipe to master list
                                 MasterList.add(newRecipe);
                             }
+                            // Populate Adapter Now
+                            updateAdapter();
                         }
                         // Try and catch are included to handle any errors due to JSON
                         catch (JSONException e) {
@@ -114,6 +127,16 @@ public class PantryIO {
         requestQueue.add(arrayreq);
 
 
+    }
+
+    private void updateAdapter() {
+        // Update Adapter
+        mAdapter.setRecipeList(MasterList);
+        mRecyclerView.setAdapter(mAdapter);
+    };
+
+    public SingleRecipe getRecipe(int position) {
+        return MasterList.get(position);
     }
 
 }
