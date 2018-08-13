@@ -26,6 +26,7 @@ public class Fragment_DetailFragment extends Fragment {
     public TextView mStepDescription;
     public mExoPlayer exoPlayer;
     private incrementDetailFragment mIncrementDetailFragment;
+    private returnToSteps mReturnToSteps;
 
     // Mandatory FragmentManager Constructor
     public Fragment_DetailFragment() {}
@@ -67,14 +68,25 @@ public class Fragment_DetailFragment extends Fragment {
         Log.d("<><><><><>", uri.toString());
         exoPlayer = new mExoPlayer(this.getContext(), playerView, uri);
 
-        // Setup Fab
-        FloatingActionButton myFab = (FloatingActionButton) rootView.findViewById(R.id.floatingActionButton);
-        myFab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // do things
-                IncrementStep();
-            }
-        });
+        // Implement FAB if exists
+        if(!getResources().getBoolean(R.bool.isTablet)) {
+            // Setup Fab
+            FloatingActionButton nextFab = (FloatingActionButton) rootView.findViewById(R.id.fabNext);
+            nextFab.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Next Step
+                    IncrementStep();
+                }
+            });
+
+            FloatingActionButton menuFab = (FloatingActionButton) rootView.findViewById(R.id.fabMenu);
+            menuFab.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Menu Now
+                    callReturnToSteps();
+                }
+            });
+        }
 
         return rootView;
     }
@@ -87,15 +99,21 @@ public class Fragment_DetailFragment extends Fragment {
     public interface incrementDetailFragment {
         public void incrementDetailFragment();
     }
+    public interface returnToSteps {
+        public void returnToSteps();
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mIncrementDetailFragment = (incrementDetailFragment) context;
+        mReturnToSteps = (returnToSteps) context;
     }
     public void IncrementStep() {
         mIncrementDetailFragment.incrementDetailFragment();
     }
-
+    public void callReturnToSteps() {
+        mReturnToSteps.returnToSteps();
+    }
 
 
 }

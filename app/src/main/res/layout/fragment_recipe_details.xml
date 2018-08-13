@@ -26,31 +26,35 @@
         android:paddingHorizontal="0dp"
         android:paddingVertical="10dp" />
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:orientation="horizontal">
+        android:layout_gravity="center_horizontal">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="215dp"
+            android:id="@+id/fabMenu"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
+            android:layout_marginStart="116dp"
             android:clickable="true"
             android:focusable="true"
-            app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_menu_black_24dp"
+            tools:layout_editor_absoluteY="12dp" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingActionButton2"
-            android:layout_width="match_parent"
+            android:id="@+id/fabNext"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
+            android:layout_marginStart="236dp"
             android:clickable="true"
             android:focusable="true"
-            app:srcCompat="@drawable/ic_menu_black_24dp" />
-    </LinearLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_navigate_next_black_24dp"
+            tools:layout_editor_absoluteY="12dp" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
 </LinearLayout>

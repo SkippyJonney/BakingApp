@@ -101,8 +101,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
-            // Send String
-            //clickListener.onListItemClick(recipeList.get(clickedPosition));
             clickListener.onListItemClick(clickedPosition);
         }
 

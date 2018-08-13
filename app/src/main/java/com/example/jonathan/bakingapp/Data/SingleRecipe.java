@@ -27,6 +27,16 @@ public class SingleRecipe implements Parcelable {
     public String getIngredient(int index) {
         return ingredients.get(index).getListing();
     }
+    public String getIngredientListing(){
+        StringBuilder ingredientTxT = new StringBuilder("");
+        ingredientTxT.append("Ingredient List:").append(System.getProperty("line.separator"));
+        Log.d("<><><><>", Integer.toString(getIngredientLength()));
+        for(int i = 0; i < getIngredientLength(); i++) {
+            ingredientTxT.append(getIngredient(i));
+            ingredientTxT.append(System.getProperty("line.separator"));
+        }
+        return ingredientTxT.toString();
+    }
     public Step getStep(int position) {
         // Get Maximum Size of Array and trim to there
         int MaxPosition = steps.size() - 1;

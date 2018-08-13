@@ -11,34 +11,28 @@ import com.example.jonathan.bakingapp.Adapters.RecipeAdapter;
 import com.example.jonathan.bakingapp.Data.DummyData;
 import com.example.jonathan.bakingapp.Data.SingleRecipe;
 import com.example.jonathan.bakingapp.R;
+import com.example.jonathan.bakingapp.Utility.BakingWidget;
 import com.example.jonathan.bakingapp.Utility.PantryIO;
 
 
-public class RecipeMainActivity  extends AppCompatActivity {
-
-    String selectedRecipe;
-    boolean isTablet;
-    private RecipeAdapter.ClickListener listener;
-    private PantryIO pantryIO;
+public class MainActivity extends AppCompatActivity {
 
     // Recycler View
     private RecyclerView mRecyclerView;
     private RecipeAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private RecipeAdapter.ClickListener listener;
     // Bundle Args
     private static final String RECIPE_KEY = "A01";
-
+    private PantryIO pantryIO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baking_list);
 
-        // Check for tablet
-        isTablet = getResources().getBoolean(R.bool.isTablet);
-
         if (savedInstanceState != null) {
-            selectedRecipe = savedInstanceState.getString("Title");
+            // recover anything?
         }
 
         // Setup Recycler View
@@ -49,35 +43,31 @@ public class RecipeMainActivity  extends AppCompatActivity {
         RecipeAdapter.ClickListener listener = new RecipeAdapter.ClickListener() {
             @Override
             public void onListItemClick(int clickedIndex) {
-                Log.d("<><><><><>", "Clicked " + clickedIndex + " on a " + isTablet);
-                // TODO Implement Intent to receive recipe detail
-                //  CASE 1: Phone -- Launch recipe_steps
-                //  CASE 2: Tablet -- Launch recipe_master_detail
-                //sendIntent(clickedIndex);
+                updateWidget(pantryIO.getRecipe(clickedIndex).getIngredientListing());
                 sendIntent(clickedIndex);
             }
         };
         mAdapter = new RecipeAdapter(listener, this);
-        // Request Recipe
+
+        // Request Recipes
         pantryIO = new PantryIO(this, getString(R.string.bakingDataURL), mAdapter, mRecyclerView);
 
-
-        // *********************************
-        // FOR DEBUG //
-        //DummyData testData = new DummyData();
-        //mAdapter.setRecipeList(testData.getData());
-        // *********************************
-        //mRecyclerView.setAdapter(mAdapter);
-
-
-
     }
-
 
     public void sendIntent(int recipeIndex) {
         Intent stepsIntent = new Intent(this, RecipeOneUpActivity.class);
         stepsIntent.putExtra(RECIPE_KEY, pantryIO.getRecipe(recipeIndex));
         startActivity(stepsIntent);
+    }
+
+
+    public void updateWidget(String ingredients) {
+        // Send ingredient string to widget.
+        Intent widgetIntent = new Intent(this, BakingWidget.class);
+        widgetIntent.setAction("UPDATE");
+        widgetIntent.putExtra("update", ingredients);
+        sendBroadcast(widgetIntent);
+        Log.d("<><><><><>", "broadcasting");
     }
 
 
