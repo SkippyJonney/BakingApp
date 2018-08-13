@@ -2,6 +2,7 @@ package com.example.jonathan.bakingapp.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -19,11 +20,7 @@ public class SingleRecipe implements Parcelable {
         return Name;
     }
     public String getImgUrl() { return ImgUrl;}
-
-
-    public int getStepLength() {
-        return steps.size();
-    }
+    public String getServings() { return Integer.toString(Servings); }
 
     // Ingredient Interface
     public int getIngredientLength() { return ingredients.size(); }
@@ -31,7 +28,15 @@ public class SingleRecipe implements Parcelable {
         return ingredients.get(index).getListing();
     }
     public Step getStep(int position) {
-        return steps.get(position);
+        // Get Maximum Size of Array and trim to there
+        int MaxPosition = steps.size() - 1;
+        if(position > MaxPosition) {
+            position = MaxPosition;
+            return steps.get(position);
+        }
+        else {
+            return steps.get(position);
+        }
     }
     public ArrayList<Step> getSteps() {
         return steps;

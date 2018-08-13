@@ -4,18 +4,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/cardPrimary">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ingredients_tv" />
+        android:id="@+id/ingredients_tv"
+        android:text="Pancakes"
+        android:layout_marginLeft="15dp"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="10dp"
+        android:textStyle="bold"/>
 
     <ListView
 
         android:id="@+id/steps_lv"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:listSelector="@android:color/transparent"
+        android:divider="@null"
+        android:dividerHeight="0dp">
+
 
     </ListView>
 

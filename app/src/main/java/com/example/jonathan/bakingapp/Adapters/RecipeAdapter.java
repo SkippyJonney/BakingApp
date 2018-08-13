@@ -67,29 +67,33 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecyclerVi
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        //holder.rvText.setText(recipeList.get(position));
-        //String imgUrl = recipeList.get(position);
+        // Populate View
+        Log.d("<><>TAG<>TAG<>TAG<>", "BINDING VIEW" + recipeList.get(position).getImgUrl());
+        holder.rvTitle.setText(recipeList.get(position).getName());
+        holder.rvServings.setText("Servings: " + recipeList.get(position).getServings());
 
-        holder.rvText.setText(recipeList.get(position).getName());
         String imgUrl = recipeList.get(position).getImgUrl();
 
-        if(!imgUrl.equals("")) {
+        Log.d("<><><><><>", "Check Null " + imgUrl);
+        if(!imgUrl.isEmpty()) {
             Uri newUri = Uri.parse(imgUrl).buildUpon().build();
-
-            //Picasso.with(mContext).load(newUri).into(holder.rvImage);
+            Log.d("<><><><><>", "Not Null " + newUri.toString());
+            Picasso.with(mContext).load(newUri).into(holder.rvImage);
         }
     }
 
     // View to Populate Recycler View With
     class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView rvText;
+        TextView rvTitle;
+        TextView rvServings;
         ImageView rvImage;
 
         RecyclerViewHolder(View view) {
             super(view);
 
-            rvText = view.findViewById(R.id.cardview_title);
+            rvTitle = view.findViewById(R.id.cardview_title);
             rvImage = view.findViewById(R.id.cardview_image);
+            rvServings = view.findViewById(R.id.cardView_servings);
 
             view.setOnClickListener(this);
         }

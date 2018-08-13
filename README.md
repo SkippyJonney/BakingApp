@@ -20,3 +20,7 @@ http://blog.moagrius.com/android/android-dynamic-fragment-not-filling-parent/
 
 Gson JSON Parsing
 https://guides.codepath.com/android/leveraging-the-gson-library
+
+Using Fragment Backstack
+https://medium.com/@jacquesgiraudel/problem-with-restoring-fragments-from-the-backstack-945dc3f7f5a5
+

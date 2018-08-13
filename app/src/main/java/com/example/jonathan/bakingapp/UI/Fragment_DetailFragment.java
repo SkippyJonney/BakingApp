@@ -1,0 +1,101 @@
+package com.example.jonathan.bakingapp.UI;
+
+import android.content.Context;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.example.jonathan.bakingapp.Data.Step;
+import com.example.jonathan.bakingapp.R;
+import com.example.jonathan.bakingapp.Utility.mExoPlayer;
+import com.google.android.exoplayer2.ui.PlayerView;
+
+public class Fragment_DetailFragment extends Fragment {
+
+    // Bundle Args
+    private static final String RECIPE_KEY = "A01";
+    public static final String TAG = "detail";
+
+    private Step mStep;
+    public TextView mStepDescription;
+    public mExoPlayer exoPlayer;
+    private incrementDetailFragment mIncrementDetailFragment;
+
+    // Mandatory FragmentManager Constructor
+    public Fragment_DetailFragment() {}
+
+    // Get Bundle
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(getArguments() != null) {
+            mStep = getArguments().getParcelable(RECIPE_KEY);
+        }
+    }
+
+    // Inflate Layout
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        // Retain fragment
+        setRetainInstance(true);
+
+        // Resume State
+        if(savedInstanceState != null) {
+            mStep = savedInstanceState.getParcelable(RECIPE_KEY);
+        }
+
+        // Build view
+        View rootView = inflater.inflate(R.layout.fragment_recipe_details, container, false);
+        mStepDescription = rootView.findViewById(R.id.F_stepDescription);
+        Log.d("<><><><><>", mStep.getDescription());
+        mStepDescription.setText("Hello");
+
+        // Set views
+        mStepDescription.setText(mStep.getDescription());
+        //Picasso.with(rootView.getContext()).load(mStep.getThumbnailURL()).into(mStepImage);
+
+        // Initialize ExoPlayer
+        PlayerView playerView = rootView.findViewById(R.id.F_stepExoPlayer);
+        Uri uri = Uri.parse(mStep.getVideoUrl());
+        Log.d("<><><><><>", uri.toString());
+        exoPlayer = new mExoPlayer(this.getContext(), playerView, uri);
+
+        // Setup Fab
+        FloatingActionButton myFab = (FloatingActionButton) rootView.findViewById(R.id.floatingActionButton);
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // do things
+                IncrementStep();
+            }
+        });
+
+        return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle currentState) {
+        currentState.putParcelable(RECIPE_KEY, mStep);
+    }
+
+    public interface incrementDetailFragment {
+        public void incrementDetailFragment();
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mIncrementDetailFragment = (incrementDetailFragment) context;
+    }
+    public void IncrementStep() {
+        mIncrementDetailFragment.incrementDetailFragment();
+    }
+
+
+
+}

@@ -32,6 +32,7 @@ public class Fragment_StepsFragment extends Fragment{
     private setDetailFragment mSetDetailFragment;
     // Bundle Args
     private static final String RECIPE_KEY = "A01";
+    public static final String TAG = "step";
 
     // Mandatory for fragment manager
     public Fragment_StepsFragment() { }
@@ -70,6 +71,7 @@ public class Fragment_StepsFragment extends Fragment{
         //listView.setAdapter(mAdapter);
 
         StringBuilder ingredientTxT = new StringBuilder("");
+        ingredientTxT.append("Ingredient List:").append(System.getProperty("line.separator"));
         Log.d("<><><><>", Integer.toString(mSingleRecipe.getIngredientLength()));
         for(int i = 0; i < mSingleRecipe.getIngredientLength(); i++) {
             ingredientTxT.append(mSingleRecipe.getIngredient(i));
@@ -88,20 +90,22 @@ public class Fragment_StepsFragment extends Fragment{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Get the selected item text from ListView
-                String selectedItem = (String) parent.getItemAtPosition(position);
+                // Get the selected step from ListView
+                //String selectedItem = (String) parent.getItemAtPosition(position);
+                Step selectedStep = (Step) mSingleRecipe.getStep(position);
 
                 // Display the selected item text on TextView
-                Log.d("<><><><><>","Your favorite : " + selectedItem);
-
+                Log.d("<><><><><>","Your favorite : " + selectedStep.getDescription());
+                //SetDetailFragment(selectedStep);
+                SetDetailFragment(position);
                 // TODO 42 Launch intent to show details view with video and details // next button
             }
         });
 
 
         // Fill Parent Params
-        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        rootView.setLayoutParams(params);
+        //ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        //rootView.setLayoutParams(params);
         return rootView;
     }
 
@@ -113,7 +117,7 @@ public class Fragment_StepsFragment extends Fragment{
     }
 
     public interface setDetailFragment {
-        public void setDetailFragment(Step step);
+        public void setDetailFragment(int step);
     }
 
     @Override
@@ -122,7 +126,7 @@ public class Fragment_StepsFragment extends Fragment{
         mSetDetailFragment = (setDetailFragment) context;
     }
 
-    public void SetDetailFragment(Step step) {
+    public void SetDetailFragment(int step) {
         mSetDetailFragment.setDetailFragment(step);
     }
 }
