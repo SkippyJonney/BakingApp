@@ -2,10 +2,10 @@
 
 ## Overview
 
-Udacity Nanodegree project that uses fragments and libraries to display baking recipes.
+Udacity Nanodegree project that uses fragments and libraries to display baking recipes. Introduces the use of unit testing.
 ## Requirements
 
-N/A
+Implement a master detail view and home screen widget with the use of fragments. Use Espresso to test intents and views.
 
 ### Sources
 

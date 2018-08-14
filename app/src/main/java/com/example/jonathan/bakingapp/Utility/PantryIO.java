@@ -1,26 +1,25 @@
 package com.example.jonathan.bakingapp.Utility;
 
-        import android.content.Context;
-        import android.support.v7.widget.RecyclerView;
-        import android.util.Log;
+import android.content.Context;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
-        import com.android.volley.RequestQueue;
-        import com.android.volley.toolbox.JsonArrayRequest;
-        import com.android.volley.VolleyError;
-        import com.android.volley.toolbox.Volley;
-        import com.android.volley.Response;
-        import com.android.volley.Request;
-        import com.example.jonathan.bakingapp.Adapters.RecipeAdapter;
-        import com.example.jonathan.bakingapp.Data.SingleRecipe;
-        import com.example.jonathan.bakingapp.Data.Step;
-        import com.example.jonathan.bakingapp.Data.Ingredient;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.jonathan.bakingapp.Adapters.RecipeAdapter;
+import com.example.jonathan.bakingapp.Data.Ingredient;
+import com.example.jonathan.bakingapp.Data.SingleRecipe;
+import com.example.jonathan.bakingapp.Data.Step;
 
-        import org.json.JSONException;
-        import org.json.JSONObject;
-        import org.json.JSONArray;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-        import java.io.IOException;
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
 
 public class PantryIO {
@@ -35,12 +34,17 @@ public class PantryIO {
     // Volley
     RequestQueue requestQueue;
 
-    public PantryIO(Context context, String urlRequest, RecipeAdapter mAdapter, RecyclerView mRecyclerView){
+    public PantryIO(Context context, String urlRequest, RecipeAdapter mAdapter, RecyclerView mRecyclerView,@Nullable final SimpleIdlingResource idlingResource){
         this.context = context;
         this.urlRequest =urlRequest;
         MasterList = new ArrayList<SingleRecipe>();
         this.mAdapter = mAdapter;
         this.mRecyclerView = mRecyclerView;
+
+        // Idling Resource
+        if (idlingResource != null) {
+            idlingResource.setIdleState(false);
+        }
 
         // Setup Volley
         requestQueue = Volley.newRequestQueue(context);
@@ -105,6 +109,8 @@ public class PantryIO {
                             }
                             // Populate Adapter Now
                             updateAdapter();
+                            // set idle
+                            idlingResource.setIdleState(true);
                         }
                         // Try and catch are included to handle any errors due to JSON
                         catch (JSONException e) {

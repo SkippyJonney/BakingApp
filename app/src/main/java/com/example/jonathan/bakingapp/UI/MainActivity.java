@@ -2,17 +2,20 @@ package com.example.jonathan.bakingapp.UI;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.example.jonathan.bakingapp.Adapters.RecipeAdapter;
-import com.example.jonathan.bakingapp.Data.DummyData;
-import com.example.jonathan.bakingapp.Data.SingleRecipe;
 import com.example.jonathan.bakingapp.R;
 import com.example.jonathan.bakingapp.Utility.BakingWidget;
 import com.example.jonathan.bakingapp.Utility.PantryIO;
+import com.example.jonathan.bakingapp.Utility.SimpleIdlingResource;
+
+import javax.annotation.Nullable;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +28,16 @@ public class MainActivity extends AppCompatActivity {
     // Bundle Args
     private static final String RECIPE_KEY = "A01";
     private PantryIO pantryIO;
+    // Will be null in production
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+    @VisibleForTesting
+    public IdlingResource getIdlingResource() {
+        if(mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             // recover anything?
         }
+
+        // get idling resource
+        getIdlingResource();
 
         // Setup Recycler View
         mRecyclerView = (RecyclerView) findViewById(R.id.bakingList_rv);
@@ -49,8 +65,16 @@ public class MainActivity extends AppCompatActivity {
         };
         mAdapter = new RecipeAdapter(listener, this);
 
+        // Moved recipe request to onStart
+        mIdlingResource.setIdleState(false);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         // Request Recipes
-        pantryIO = new PantryIO(this, getString(R.string.bakingDataURL), mAdapter, mRecyclerView);
+        pantryIO = new PantryIO(this, getString(R.string.bakingDataURL), mAdapter, mRecyclerView, mIdlingResource);
 
     }
 
