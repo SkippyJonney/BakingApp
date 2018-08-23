@@ -1,16 +1,13 @@
 package com.example.jonathan.bakingapp.UI;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.jonathan.bakingapp.Data.SingleRecipe;
-import com.example.jonathan.bakingapp.Data.Step;
 import com.example.jonathan.bakingapp.R;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
@@ -48,8 +45,8 @@ public class RecipeOneUpActivity extends FragmentActivity implements Fragment_St
         ingredientView = findViewById(R.id.ingredients_tv);
         if(isTablet && getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
             FRAGMENT_STEP_FRAME = R.id.fragment;
-            //FRAGMENT_DETAIL_FRAME = R.id.fragment_alt;
-            FRAGMENT_DETAIL_FRAME = (R.id.fragment_alt == 0) ? R.id.fragment : R.id.fragment_alt;
+            FRAGMENT_DETAIL_FRAME = R.id.fragment_alt;
+            //FRAGMENT_DETAIL_FRAME = (R.id.fragment_alt == 0) ? R.id.fragment : R.id.fragment_alt;
         } else {
             FRAGMENT_DETAIL_FRAME = R.id.fragment;
             FRAGMENT_STEP_FRAME = R.id.fragment;
@@ -59,22 +56,28 @@ public class RecipeOneUpActivity extends FragmentActivity implements Fragment_St
         Intent intent = getIntent();
         mSingleRecipe = intent.getParcelableExtra(RECIPE_KEY);
 
-        if(savedInstanceState == null) {
-            Bundle args = new Bundle();
-            args.putParcelable(RECIPE_KEY, mSingleRecipe);
+        // Prepare Fragments Args
+        Bundle args = new Bundle();
+        args.putParcelable(RECIPE_KEY, mSingleRecipe);
+        mFragmentManager = getSupportFragmentManager();
 
-            // Create Fragments
-            mFragmentManager = getSupportFragmentManager();
+        if(savedInstanceState == null) {
+            // Build Fragments and Commit them
             stepsFragment = new Fragment_StepsFragment();
             stepsFragment.setArguments(args);
             mFragmentManager.beginTransaction()
                     .add(FRAGMENT_STEP_FRAME, stepsFragment, STEP_TAG)
                     .commit();
         } else {
-            stepsFragment = (Fragment_StepsFragment) getSupportFragmentManager()
-                    .findFragmentByTag(STEP_TAG);
-            detailFragment = (Fragment_DetailFragment) getSupportFragmentManager()
-                    .findFragmentByTag(DETAIL_TAG);
+
+            if( stepsFragment != null) {
+                stepsFragment = (Fragment_StepsFragment) getSupportFragmentManager()
+                        .findFragmentByTag(STEP_TAG);
+            }
+            if( detailFragment != null) {
+                detailFragment = (Fragment_DetailFragment) getSupportFragmentManager()
+                        .findFragmentByTag(DETAIL_TAG);
+            }
         }
 
 
@@ -93,6 +96,7 @@ public class RecipeOneUpActivity extends FragmentActivity implements Fragment_St
         detailFragment.setArguments(args);
         mFragmentManager.beginTransaction()
                 .replace(FRAGMENT_DETAIL_FRAME, detailFragment, DETAIL_TAG)
+                //.add(FRAGMENT_DETAIL_FRAME, detailFragment, DETAIL_TAG)
                 .addToBackStack(null)
                 .commit();
     }
@@ -104,6 +108,12 @@ public class RecipeOneUpActivity extends FragmentActivity implements Fragment_St
 
     @Override
     public void returnToSteps() {
+        // Prepare Fragments Args
+        Bundle args = new Bundle();
+        args.putParcelable(RECIPE_KEY, mSingleRecipe);
+        stepsFragment = new Fragment_StepsFragment();
+        stepsFragment.setArguments(args);
+
         mFragmentManager.beginTransaction()
                 .replace(FRAGMENT_STEP_FRAME, stepsFragment, STEP_TAG)
                 .addToBackStack(null)
